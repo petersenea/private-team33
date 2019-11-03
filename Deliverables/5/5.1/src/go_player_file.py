@@ -10,6 +10,6 @@ class GoPlayerFile(GoPlayer):
    @protocol_registered
    @protocol_stone_set
    def choose_move(self, boards):
-      curr = move_index
+      curr = self.move_index
       self.move_index += 1
-      return points[curr]
+      return self.points[curr]

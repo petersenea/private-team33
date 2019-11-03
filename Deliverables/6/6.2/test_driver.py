@@ -8,6 +8,7 @@ from point import parse_move
 from stone import StoneEnum, make_stone
 from go_player_file import GoPlayerFile
 from go_referee import GoReferee
+from go_ref_formatter import format_obj
 
 if __name__ == "__main__":
    objs = json_parse_stdin()
@@ -26,4 +27,7 @@ if __name__ == "__main__":
    player2.receive_stone(StoneEnum.WHITE)
 
    ## Initialize Go Ref
-   go_referee = GoReferee(board, [player1, player2])
+   go_referee = GoReferee([board], [player1, player2])
+   output = go_referee.play_game()
+   raw_output = list(map(format_obj, output))
+   print (raw_output)
