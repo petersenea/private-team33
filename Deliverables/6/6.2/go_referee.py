@@ -25,10 +25,10 @@ class GoReferee:
          output.append(deepcopy(self.history))
          move = self.players[turn].choose_move(self.history)
          if not move:
-            return output
-         elif move == "pass": 
+            return output[0:-1]
+         elif move == "pass":
             pass_count += 1
-         else: 
+         else:
             pass_count = 0
             move_valid = self.move_ref.valid_move(self.players[turn].stone_type, move, self.history, self.history[0])
             if not move_valid:
