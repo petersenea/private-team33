@@ -19,32 +19,38 @@ class GoReferee:
 
    ## Public Methods
    def play_game(self):
-      output = ["B", "W"]
-      pass_count = 0
-      turn = 0
+      output, invalid_mover = ["B", "W"], None
+      pass_count, turn = 0, 0
       while pass_count < 2:
          output.append(deepcopy(self.history))
          move = self.players[turn].choose_move(self.history)
-         if move == "pass":
+         if not move:
+            return output
+         elif move == "pass": 
             pass_count += 1
-         else:
+         else: 
             pass_count = 0
             move_valid = self.move_ref.valid_move(self.players[turn].stone_type, move, self.history, self.history[0])
             if not move_valid:
+               invalid_mover = turn
                break
-            self.play_move(move, turn)
-         turn = (turn + 1) % 2
-      output += sorted(self.determine_winner())
+         self.play_move(move, turn)
+         turn = self.next_turn(turn)
+      output.append(sorted(self.determine_winner(invalid_mover)))
       return output
 
-   def play_move(self, point, turn):
+   def play_move(self, move, turn):
       new_board = deepcopy(self.history[0])
-      new_board.place_and_update(self.players[turn].stone_type, point)
+      if move != "pass":
+         new_board.place_and_update(self.players[turn].stone_type, move)
       self.history.insert(0, new_board)
       if len(self.history) == 4:
          self.history.pop()
 
-   def determine_winner(self):
+   def determine_winner(self, invalid_mover):
+      if invalid_mover is not None:
+         winner = self.next_turn(invalid_mover)
+         return [self.players[winner].name]
       score_dict = self.score_ref.get_score(self.history[0])
       player1_score = score_dict[self.players[0].stone_type]
       player2_score = score_dict[self.players[1].stone_type]
@@ -54,3 +60,6 @@ class GoReferee:
          return [self.players[0].name]
       else:
          return [self.players[1].name]
+      
+   def next_turn(self, turn):
+      return (turn + 1) % 2

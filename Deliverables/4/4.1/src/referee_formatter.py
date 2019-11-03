@@ -8,4 +8,5 @@ def format_score(score):
 
 def format_pretty_json(objects):
    joined = ',\n  '.join(json.JSONEncoder().encode(obj) for obj in objects)
+   joined = joined.replace('],', '],\n   ')
    return "[\n  {}\n]".format(joined)

@@ -1,5 +1,6 @@
 import sys
 sys.path.append('../../3/3.1/src')
+sys.path.append('../../4/4.1/src')
 sys.path.append('../../5/5.1/src')
 from json_parser import json_parse_stdin
 from constants import BOARD_DIM
@@ -9,6 +10,7 @@ from stone import StoneEnum, make_stone
 from go_player_file import GoPlayerFile
 from go_referee import GoReferee
 from go_ref_formatter import format_obj
+from referee_formatter import format_pretty_json
 
 if __name__ == "__main__":
    objs = json_parse_stdin()
@@ -30,4 +32,4 @@ if __name__ == "__main__":
    go_referee = GoReferee([board], [player1, player2])
    output = go_referee.play_game()
    raw_output = list(map(format_obj, output))
-   print (raw_output)
+   print (format_pretty_json(raw_output))
