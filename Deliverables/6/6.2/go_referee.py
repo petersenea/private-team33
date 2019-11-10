@@ -3,6 +3,7 @@ sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
 from copy import deepcopy
 from stone import StoneEnum
+from constants import PASS
 from move_referee import MoveReferee
 from score_referee import ScoreReferee
 
@@ -19,18 +20,19 @@ class GoReferee:
 
    ## Public Methods
    def play_game(self):
-      output, invalid_mover = ["B", "W"], None
+      output, invalid_mover = [StoneEnum.BLACK, StoneEnum.WHITE], None
       pass_count, turn = 0, 0
       while pass_count < 2:
          output.append(deepcopy(self.history))
-         move = self.players[turn].choose_move(self.history)
+         curr = self.players[turn]
+         move = curr.choose_move(self.history)
          if not move:
             return output[0:-1]
-         elif move == "pass":
+         elif move == PASS:
             pass_count += 1
          else:
             pass_count = 0
-            move_valid = self.move_ref.valid_move(self.players[turn].stone_type, move, self.history, self.history[0])
+            move_valid = self.move_ref.valid_move(curr.stone_type, move, self.history, self.history[0])
             if not move_valid:
                invalid_mover = turn
                break
@@ -41,7 +43,7 @@ class GoReferee:
 
    def play_move(self, move, turn):
       new_board = deepcopy(self.history[0])
-      if move != "pass":
+      if move != PASS:
          new_board.place_and_update(self.players[turn].stone_type, move)
       self.history.insert(0, new_board)
       if len(self.history) == 4:

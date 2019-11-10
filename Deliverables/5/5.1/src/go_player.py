@@ -4,28 +4,6 @@ sys.path.append('../../4/4.1/src/')
 from stone import StoneEnum
 from move_referee import MoveReferee
 
-## Decorators
-def valid_stone(func):
-   def wrapper(*args, **kwargs):
-      if not args[1] or not isinstance(args[1], StoneEnum):
-         raise Exception("Invalid Parameter: bad stone passed")
-      return func(*args, **kwargs)
-   return wrapper
-
-def protocol_registered(func):
-   def wrapper(*args, **kwargs):
-      if not args[0].name:
-         raise Exception("Invalid Protocol: must first register a player")
-      return func(*args, **kwargs)
-   return wrapper
-
-def protocol_stone_set(func):
-   def wrapper(*args, **kwargs):
-      if not args[0].stone_type:
-         raise Exception("Invalid Protocol: must first receive a stone")
-      return func(*args, **kwargs)
-   return wrapper
-
 class GoPlayer:
 
    ## Constructor
@@ -39,12 +17,38 @@ class GoPlayer:
       self.name = name
       return name
 
-   @valid_stone
-   @protocol_registered
    def receive_stone(self, stone_type):
       self.stone_type = stone_type
 
-   @protocol_registered
-   @protocol_stone_set
    def choose_move(self, boards):
       pass
+
+class GoPlayerContract(GoPlayer):
+
+   def __init__(self, player):
+      self.player = player   
+
+   @property
+   def stone_type(self):
+      return self.player.stone_type
+
+   @property
+   def name(self):
+      return self.player.name
+   
+   def register(self, name="no name"):
+      if self.player.name != None:
+         raise Exception("register called multiple times")
+      return self.player.register(name)
+   
+   def receive_stone(self, stone_type):
+      if not self.player.name:
+         raise Exception("receive called before register")
+      elif self.player.stone_type:
+         raise Exception("receive called twice")
+      self.player.receive_stone(stone_type)
+   
+   def choose_move(self, boards):
+      if not self.player.stone_type:
+         raise Exception("choose move called before receive")
+      return self.player.choose_move(boards)

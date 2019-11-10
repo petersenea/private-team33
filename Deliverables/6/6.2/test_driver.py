@@ -8,6 +8,7 @@ from board import Board
 from point import parse_move
 from stone import StoneEnum, make_stone
 from go_player_file import GoPlayerFile
+from go_player import GoPlayerContract
 from go_referee import GoReferee
 from go_ref_formatter import format_obj
 from referee_formatter import format_pretty_json
@@ -20,11 +21,13 @@ if __name__ == "__main__":
    board = Board([[make_stone(None) for i in range(BOARD_DIM)] for j in range(BOARD_DIM)])
 
    ## Initialize Players
-   player1 = GoPlayerFile(points[::2])
+   inner_player1 = GoPlayerFile(points[::2])
+   player1 = GoPlayerContract(inner_player1)
    player1.register(names[0])
    player1.receive_stone(StoneEnum.BLACK)
 
-   player2 = GoPlayerFile(points[1::2])
+   inner_player2 = GoPlayerFile(points[1::2])
+   player2 = GoPlayerContract(inner_player2)
    player2.register(names[1])
    player2.receive_stone(StoneEnum.WHITE)
 

@@ -24,12 +24,14 @@ class Stone():
       return self.stone_type
 
    def get_raw(self):
-      stone_type = self.get_type()
-      if not stone_type:
-         return EMPTY_STONE
-      if stone_type is StoneEnum.WHITE:
-         return WHITE_STONE
-      return BLACK_STONE
+      return get_raw_stone(self.stone_type)
+
+def get_raw_stone(stone_type):
+   if not stone_type:
+      return EMPTY_STONE
+   if stone_type is StoneEnum.WHITE:
+      return WHITE_STONE
+   return BLACK_STONE
 
 def make_stone(stone_type):
    if stone_type == StoneEnum.WHITE:

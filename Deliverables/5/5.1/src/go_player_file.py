@@ -1,4 +1,4 @@
-from go_player import GoPlayer, protocol_registered, protocol_stone_set
+from go_player import GoPlayer
 
 class GoPlayerFile(GoPlayer):
 
@@ -7,8 +7,6 @@ class GoPlayerFile(GoPlayer):
       self.points = points
       self.move_index = 0
 
-   @protocol_registered
-   @protocol_stone_set
    def choose_move(self, boards):
       if self.move_index > len(self.points) - 1:
          return None

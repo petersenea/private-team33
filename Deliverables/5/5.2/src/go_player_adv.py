@@ -6,7 +6,6 @@ from copy import deepcopy
 from stone import get_other_type
 from point import Point
 from go_player_basic import GoPlayerBasic
-from go_player import protocol_registered, protocol_stone_set
 from move_referee import MoveReferee
 
 class GoPlayerAdv(GoPlayerBasic):
@@ -14,9 +13,7 @@ class GoPlayerAdv(GoPlayerBasic):
    def __init__(self, n = 1):
       super().__init__()
       self.n = n
-   
-   @protocol_registered
-   @protocol_stone_set
+
    def choose_move(self, boards):
       if not self.move_referee.valid_history(self.stone_type, boards):
          return "This history makes no sense!"

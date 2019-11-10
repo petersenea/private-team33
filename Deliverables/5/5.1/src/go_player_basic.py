@@ -4,11 +4,10 @@ sys.path.append('../../4/4.1/src/')
 from stone import StoneEnum
 from move_referee import MoveReferee
 from point import Point
-from go_player import GoPlayer, protocol_registered, protocol_stone_set
+from go_player import GoPlayer
 
 class GoPlayerBasic(GoPlayer):
-   @protocol_registered
-   @protocol_stone_set
+
    def choose_move(self, boards):
       if not self.move_referee.valid_history(self.stone_type, boards):
          return "This history makes no sense!"

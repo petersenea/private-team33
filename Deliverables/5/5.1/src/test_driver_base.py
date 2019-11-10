@@ -13,7 +13,7 @@ def execute_input(player, arr):
       return player.register()
    elif arr[0] == RECEIVE:
       stone = parse_stone(arr[1])
-      player.receive_stone(stone.get_type())
+      return player.receive_stone(stone.get_type())
    elif arr[0] == MOVE:
       boards = parse_boards(arr[1])
       output = player.choose_move(boards)
@@ -21,7 +21,7 @@ def execute_input(player, arr):
          return output
       return get_raw(output)
    else:
-      raise Exception("Invalid name given to execute input")
+      return "GO has gone crazy!"
 
 if __name__ == "__main__":
    player = GoPlayerBasic()

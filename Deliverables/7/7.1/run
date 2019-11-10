@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# run.sh: runs the actual submission
+
+python3 server/test_driver.py &
+python3 client/fake_test_driver.py &
