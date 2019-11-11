@@ -10,6 +10,12 @@ def read_config(path):
     with open(path) as json_data_file:
        return json.load(json_data_file)
 
+def try_shutdown(s):
+    try:
+        s.shutdown(socket.SHUT_RDWR)
+    except:
+        pass
+
 if __name__ == "__main__":
     ## Read Stdin
     objs = json_parse_stdin()
@@ -37,7 +43,5 @@ if __name__ == "__main__":
     conn.send(json.dumps(-1).encode('utf-8'))
     conn.close()
 
-    s.close()
-    
     ## Stdout
     print (json.dumps(list(output)))

@@ -10,12 +10,11 @@ sys.path.append('../../4/4.1/src/')
 from test_driver_base import execute_input
 from go_player_adv import GoPlayerAdv
 from go_player import GoPlayerContract
-from test_driver import read_config
+from test_driver import read_config, try_shutdown
 
 def receive_and_send(s, player):
     while True:
         data = s.recv(BUFFER_SIZE)
-        # print(data)
         data = json.loads(data.decode('utf-8'))
         if data == -1:
             break
@@ -26,7 +25,6 @@ def receive_and_send(s, player):
             output = "GO has gone crazy!"
             s.send(json.dumps(output).encode('utf-8'))
             break
-
 
 config = read_config('go.config')
 TCP_IP = config["IP"]
@@ -44,4 +42,5 @@ while True:
 player = GoPlayerAdv(N)
 player_contract = GoPlayerContract(player)
 receive_and_send(s, player_contract)
+try_shutdown(s)
 s.close()
