@@ -37,5 +37,7 @@ if __name__ == "__main__":
     conn.send(json.dumps(-1).encode('utf-8'))
     conn.close()
 
+    s.close()
+    
     ## Stdout
     print (json.dumps(list(output)))
