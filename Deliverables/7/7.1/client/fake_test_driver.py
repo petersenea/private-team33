@@ -15,8 +15,8 @@ from test_driver import read_config
 def receive_and_send(s, player):
     while True:
         data = s.recv(BUFFER_SIZE)
-        print(data)
-        data = json.loads(data)
+        # print(data)
+        data = json.loads(data.decode('utf-8'))
         if data == -1:
             break
         try:
