@@ -1,6 +1,6 @@
 import socket
 import json
-import sys
+import sys, time
 sys.path.append('server/')
 sys.path.append('../../5/5.1/src/')
 sys.path.append('../../5/5.2/src/')
@@ -12,19 +12,10 @@ from go_player_adv import GoPlayerAdv
 from go_player import GoPlayerContract
 from test_driver import read_config
 
-
-
-config = read_config('go.config')
-TCP_IP = config["IP"]
-TCP_PORT = config["port"]
-config1 = read_config('go-player.config')
-N = config1["depth"]
-BUFFER_SIZE = 5552
-
-
 def receive_and_send(s, player):
     while True:
         data = s.recv(BUFFER_SIZE)
+        print(data)
         data = json.loads(data)
         if data == -1:
             break
@@ -35,16 +26,22 @@ def receive_and_send(s, player):
             output = "GO has gone crazy!"
             s.send(json.dumps(output).encode('utf-8'))
             break
-            
-        
-    s.close()
 
 
+config = read_config('go.config')
+TCP_IP = config["IP"]
+TCP_PORT = config["port"]
+config1 = read_config('go-player.config')
+N = config1["depth"]
+BUFFER_SIZE = 5552
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
+while True:
+    try:
+        s.connect((TCP_IP, TCP_PORT))
+        break
+    except:
+        continue
 player = GoPlayerAdv(N)
-
 player_contract = GoPlayerContract(player)
-
-
 receive_and_send(s, player_contract)
+s.close()

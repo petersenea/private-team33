@@ -23,7 +23,7 @@ if __name__ == "__main__":
     s.bind((TCP_IP, TCP_PORT))
     s.listen(1)
     conn, addr = s.accept()
-
+    
     player = GoPlayerNetwork(conn)
     output = []
     for obj in objs:
@@ -32,12 +32,10 @@ if __name__ == "__main__":
             output.append(ret)
         if ret == "GO has gone crazy!":
             break
-   
-    ## Stdout
-    # print (json.dumps(list(output)))
-    sys.stdout.write(json.dumps(list(output)))
-   
+
     ## Close the connection
     conn.send(json.dumps(-1).encode('utf-8'))
     conn.close()
 
+    ## Stdout
+    print (json.dumps(list(output)))
