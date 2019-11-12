@@ -11,14 +11,23 @@ class GoPlayerNetwork(GoPlayer):
    def __init__(self, conn):
       self.conn = conn
       self.buf_size = 256
+      self.name = None
+      self.stone_type = None
    
    def register(self, name="no name"):
       send_str = json.dumps([REGISTER])
-      return self.send_and_receive(send_str)
+      ret = self.send_and_receive(send_str)
+      if ret != GO_CRAZY:
+         self.name = ret
+      return ret
 
    def receive_stone(self, stone_type):
       send_str = json.dumps([RECEIVE, get_raw_stone(stone_type)])
-      return self.send_and_receive(send_str)
+      ret = self.send_and_receive(send_str)
+      if ret != GO_CRAZY:
+         self.stone_type = stone_type
+      return ret
+   
 
    def choose_move(self, boards):
       boards_f = [format_board(x.board) for x in boards]

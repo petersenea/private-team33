@@ -6,6 +6,7 @@ from constants import GO_CRAZY
 from json_parser import json_parse_stdin
 from go_player_net import GoPlayerNetwork
 from test_driver_base import execute_input
+from go_player import GoPlayerContract
 
 def read_config(path):
     with open(path) as json_data_file:
@@ -42,7 +43,9 @@ if __name__ == "__main__":
     s.listen(1)
     conn, addr = s.accept()
     
-    player = GoPlayerNetwork(conn)
+    player_inner = GoPlayerNetwork(conn)
+    player = GoPlayerContract(player_inner)
+    
     output = []
     for obj in objs:
         ret = execute_input(player, obj)
