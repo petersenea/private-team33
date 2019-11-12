@@ -51,4 +51,6 @@ class GoPlayerContract(GoPlayer):
    def choose_move(self, boards):
       if not self.player.stone_type:
          raise Exception("choose move called before receive")
+      if len(boards) > 3:
+         raise Exception("bad boards passed in")
       return self.player.choose_move(boards)

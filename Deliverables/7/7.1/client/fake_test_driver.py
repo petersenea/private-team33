@@ -1,6 +1,4 @@
-import socket
-import json
-import sys, time
+import socket, json, sys, time
 sys.path.append('server/')
 sys.path.append('../../5/5.1/src/')
 sys.path.append('../../5/5.2/src/')
@@ -31,16 +29,17 @@ TCP_IP = config["IP"]
 TCP_PORT = config["port"]
 config1 = read_config('go-player.config')
 N = config1["depth"]
-BUFFER_SIZE = 5552
+BUFFER_SIZE = 55520
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-while True:
+for i in range(30):
     try:
         s.connect((TCP_IP, TCP_PORT))
         break
     except:
+        time.sleep(1)
         continue
 player = GoPlayerAdv(N)
 player_contract = GoPlayerContract(player)
 receive_and_send(s, player_contract)
-try_shutdown(s)
+try_shutdown(s, socket.SHUT_RDWR)
 s.close()

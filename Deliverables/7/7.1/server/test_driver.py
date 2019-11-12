@@ -1,4 +1,4 @@
-import sys, socket, json
+import sys, socket, json, time
 sys.path.append('../../3/3.1/src')
 sys.path.append('../../5/5.1/src')
 sys.path.append('../../../5/5.1/src')
@@ -10,11 +10,21 @@ def read_config(path):
     with open(path) as json_data_file:
        return json.load(json_data_file)
 
-def try_shutdown(s):
+def write_config(data, path):
+    with open(path, "w") as json_file:
+        json.dump(data, json_file)
+
+def try_shutdown(s, how):
     try:
-        s.shutdown(socket.SHUT_RDWR)
+        s.shutdown(how)
     except:
         pass
+
+def new_port(port):
+    port += 1
+    if port == 65535:
+        port = 8000
+    return port
 
 if __name__ == "__main__":
     ## Read Stdin
@@ -27,6 +37,7 @@ if __name__ == "__main__":
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((TCP_IP, TCP_PORT))
+    s.settimeout(60)
     s.listen(1)
     conn, addr = s.accept()
     
@@ -41,7 +52,14 @@ if __name__ == "__main__":
 
     ## Close the connection
     conn.send(json.dumps(-1).encode('utf-8'))
+    try_shutdown(conn, socket.SHUT_RDWR)
     conn.close()
+    try_shutdown(s, socket.SHUT_RDWR)
+    s.close()
+
+    ## Update the Port
+    config["port"] = new_port(TCP_PORT)
+    write_config(config, 'go.config')
 
     ## Stdout
     print (json.dumps(list(output)))
