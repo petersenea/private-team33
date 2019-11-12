@@ -1,6 +1,8 @@
 import sys, json
 sys.path.append('../../../3/3.1/src')
 from stone import get_raw_stone
+from constants import PASS, GO_CRAZY
+from point import str_to_point
 from output_formatter import format_board
 from go_player import GoPlayer
 
@@ -21,7 +23,8 @@ class GoPlayerNetwork(GoPlayer):
    def choose_move(self, boards):
       boards_f = [format_board(x.board) for x in boards]
       send_str = json.dumps(["make-a-move", boards_f])
-      return self.send_and_receive(send_str)
+      ret = self.send_and_receive(send_str)
+      return ret if ret in [PASS, GO_CRAZY] else str_to_point(ret)
 
    def send_and_receive(self, send_str):
       self.conn.send(send_str.encode('utf-8'))
