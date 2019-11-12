@@ -9,18 +9,21 @@ from constants import REGISTER, RECEIVE, MOVE
 from go_player_basic import GoPlayerBasic
 
 def execute_input(player, arr):
-   if arr[0] == REGISTER:
-      return player.register()
-   elif arr[0] == RECEIVE:
-      stone = parse_stone(arr[1])
-      return player.receive_stone(stone.get_type())
-   elif arr[0] == MOVE:
-      boards = parse_boards(arr[1])
-      output = player.choose_move(boards)
-      if isinstance(output, str):
-         return output
-      return get_raw(output)
-   else:
+   try: 
+      if arr[0] == REGISTER:
+         return player.register()
+      elif arr[0] == RECEIVE:
+         stone = parse_stone(arr[1])
+         return player.receive_stone(stone.get_type())
+      elif arr[0] == MOVE:
+         boards = parse_boards(arr[1])
+         output = player.choose_move(boards)
+         if isinstance(output, str):
+            return output
+         return get_raw(output)
+      else:
+         raise Exception("bad procedure name")
+   except:
       return "GO has gone crazy!"
 
 if __name__ == "__main__":
