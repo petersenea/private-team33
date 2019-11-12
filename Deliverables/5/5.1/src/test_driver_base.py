@@ -18,6 +18,8 @@ def execute_input(player, arr):
          stone = parse_stone(arr[1])
          return player.receive_stone(stone.get_type())
       elif arr[0] == MOVE:
+         if (len(arr) != 2): 
+            raise GoCrazyException("bad input")
          boards = parse_boards(arr[1])
          output = player.choose_move(boards)
          if isinstance(output, str):
