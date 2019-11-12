@@ -3,6 +3,7 @@ sys.path.append('../../3/3.1/src')
 sys.path.append('../../5/5.1/src')
 sys.path.append('../../../5/5.1/src')
 from point import Point, get_raw
+from constants import GO_CRAZY
 from json_parser import json_parse_stdin
 from go_player_net import GoPlayerNetwork
 from test_driver_base import execute_input
@@ -56,7 +57,7 @@ if __name__ == "__main__":
         ret = execute_input(player, obj)
         if ret:
             output.append(ret)
-        if ret == "GO has gone crazy!":
+        if ret == GO_CRAZY:
             break
 
     ## Close the connection

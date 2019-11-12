@@ -3,6 +3,7 @@ sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
 from json_parser import json_parse_stdin
 from point import get_raw
+from constants import GO_CRAZY
 from referee_formatter import format_pretty_json
 from obj_parser import parse_boards, parse_stone
 from constants import REGISTER, RECEIVE, MOVE
@@ -24,7 +25,7 @@ def execute_input(player, arr):
       else:
          raise Exception("bad procedure name")
    except:
-      return "GO has gone crazy!"
+      return GO_CRAZY
 
 if __name__ == "__main__":
    player = GoPlayerBasic()

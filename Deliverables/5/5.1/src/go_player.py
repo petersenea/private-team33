@@ -55,6 +55,8 @@ class GoPlayerContract(GoPlayer):
          raise Exception("receive called before register")
       elif self.has_stones:
          raise Exception("receive called twice")
+      else:
+         self.has_stones = True
       self.player.receive_stones(stone_type)
 
 
