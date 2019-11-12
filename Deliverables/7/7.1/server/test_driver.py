@@ -2,7 +2,6 @@ import sys, socket, json, time
 sys.path.append('../../3/3.1/src')
 sys.path.append('../../5/5.1/src')
 sys.path.append('../../../5/5.1/src')
-from point import Point, get_raw
 from constants import GO_CRAZY
 from json_parser import json_parse_stdin
 from go_player_net import GoPlayerNetwork
@@ -27,14 +26,6 @@ def new_port(port):
     if port == 65535:
         port = 8000
     return port
-
-def format_obj(obj):
-    if isinstance(obj, str):
-        return str
-    elif isinstance(obj, Point):
-        return get_raw(obj)
-    else:
-        raise Exception("bad type passed to format")
 
 if __name__ == "__main__":
     ## Read Stdin

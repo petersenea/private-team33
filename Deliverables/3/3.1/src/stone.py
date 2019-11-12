@@ -1,6 +1,7 @@
 import sys
 from constants import WHITE_STONE, BLACK_STONE, EMPTY_STONE
 from enum import Enum
+from exceptions import GoCrazyException
 
 class StoneEnum(Enum):
    WHITE = 1
@@ -15,7 +16,7 @@ class Stone():
       elif s == BLACK_STONE:
          self.stone_type = StoneEnum.BLACK
       else:
-         raise Exception("invalid maybe_stone input")
+         raise GoCrazyException("invalid maybe_stone input")
    
    def set_type(self, stone_type):
       self.stone_type = stone_type
@@ -41,7 +42,7 @@ def make_stone(stone_type):
    elif stone_type == None:
       return Stone(EMPTY_STONE)
    else:
-      raise Exception("Invalid stone type passed")
+      raise GoCrazyException("Invalid stone type passed")
 
 def get_other_type(stone_type):
    if stone_type == StoneEnum.WHITE:
@@ -49,4 +50,4 @@ def get_other_type(stone_type):
    elif stone_type == StoneEnum.BLACK:
       return StoneEnum.WHITE
    else:
-      raise Exception("Invalid input to get other type")
+      raise GoCrazyException("Invalid input to get other type")

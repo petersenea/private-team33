@@ -1,0 +1,2 @@
+class GoCrazyException(Exception):
+    pass

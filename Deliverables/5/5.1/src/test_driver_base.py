@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
+from exceptions import GoCrazyException
 from json_parser import json_parse_stdin
 from point import get_raw
 from constants import GO_CRAZY
@@ -23,8 +24,8 @@ def execute_input(player, arr):
             return output
          return get_raw(output)
       else:
-         raise Exception("bad procedure name")
-   except:
+         raise GoCrazyException("bad procedure name")
+   except GoCrazyException:
       return GO_CRAZY
 
 if __name__ == "__main__":
