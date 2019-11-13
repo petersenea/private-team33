@@ -11,6 +11,7 @@ from go_player_adv import GoPlayerAdv
 from go_player import GoPlayerContract
 from test_driver import read_config, try_shutdown
 
+## performs the actions read from the socket on the player
 def receive_and_send(s, player):
     while True:
         data = s.recv(BUFFER_SIZE)
@@ -25,6 +26,7 @@ def receive_and_send(s, player):
             s.send(json.dumps(output).encode('utf-8'))
             break
 
+## creates socket
 config = read_config('go.config')
 TCP_IP = config["IP"]
 TCP_PORT = config["port"]
@@ -32,6 +34,7 @@ config1 = read_config('go-player.config')
 N = config1["depth"]
 BUFFER_SIZE = 55520
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 for i in range(30):
     try:
         s.connect((TCP_IP, TCP_PORT))
@@ -39,6 +42,8 @@ for i in range(30):
     except:
         time.sleep(1)
         continue
+
+## instantiate remote player
 player = GoPlayerAdv(N)
 player_contract = GoPlayerContract(player)
 receive_and_send(s, player_contract)
