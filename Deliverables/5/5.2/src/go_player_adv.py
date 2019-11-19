@@ -18,7 +18,7 @@ class GoPlayerAdv(GoPlayerBasic):
       if not self.move_referee.valid_history(self.stone_type, boards):
          return "This history makes no sense!"
       ret = self._choose_move_recur(boards, boards[0], self.n)
-      return ret if ret else super().choose_move(boards)
+      return Point(ret[0], ret[1]) if ret else super().choose_move(boards)
    
    def _choose_move_recur(self, hist, curr, n):
       if n is 1:

@@ -13,5 +13,5 @@ class GoPlayerBasic(GoPlayer):
          return "This history makes no sense!"
       for x, y in sorted(list(boards[0].get_points(None))):
          if self.move_referee.valid_move(self.stone_type, Point(x, y), boards, boards[0]):
-            return (x, y)
+            return Point(x, y)
       return "pass"

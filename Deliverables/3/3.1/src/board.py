@@ -1,4 +1,4 @@
-from stone import StoneEnum, Stone, get_other_type
+from stone import StoneEnum, Stone, get_other_type, make_stone
 from point import Point
 from constants import BOARD_DIM
 
@@ -141,3 +141,6 @@ class Board():
 
    def coord_valid(self, coord):
       return 0 <= coord and coord < self.board_dim
+
+def empty_board():
+    return Board([[make_stone(None) for i in range(BOARD_DIM)] for j in range(BOARD_DIM)])
