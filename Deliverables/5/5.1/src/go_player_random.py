@@ -32,6 +32,14 @@ class GoPlayerCrazy(GoPlayerRandom):
         super().__init__()
         self.move_ref = MoveReferee()
         self.randomness = 0.5
+    
+    def register(self, name = "no name"):
+        self._throw_exception()
+        return super().register(name)
+
+    def receive_stone(self, stone_type):
+        self._throw_exception()
+        return super().receive_stone(stone_type)
 
     def choose_move(self, boards):
         ret = self._return_invalid()

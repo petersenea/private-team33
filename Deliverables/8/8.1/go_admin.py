@@ -7,18 +7,21 @@ from go_player_net import GoPlayerNetwork
 from go_referee import GoReferee
 from board import empty_board
 from stone import StoneEnum
+from exceptions import *
 
 class GoAdmin:
 
     def __init__(self):
-        board = empty_board()
-        default_player = self.load_default_player()
+        self.default_player = self.load_default_player()
         self.conn = self.create_server()
-        network_player = self.load_network_player()
-        self.referee = GoReferee([board], [default_player, network_player])
+        self.network_player = self.load_network_player()
 
     def administrate_game(self):
-        out = self.referee.play_game()
+        if not self.network_player:
+            return ['player1']
+        board = empty_board()
+        referee = GoReferee([board], [self.default_player, self.network_player])
+        out = referee.play_game()
         self.close_server()
         return out
     
@@ -55,8 +58,11 @@ class GoAdmin:
 
     def load_network_player(self):
         network_player = GoPlayerNetwork(self.conn)
-        network_player.register("player2")
-        network_player.receive_stone(StoneEnum.WHITE)
+        try:
+            network_player.register("player2")  
+            network_player.receive_stone(StoneEnum.WHITE)
+        except CloseConnectionException:
+            return None
         return network_player
 
 
