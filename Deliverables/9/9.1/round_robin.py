@@ -57,6 +57,7 @@ class RoundRobinTournament:
             self._update_score_cheater(a)
             self.cheaters.append(self.names[a])
             self._replace_cheater(a)
+            self.players[b].end_game()
             return
         
         player2 = self.players[b]
