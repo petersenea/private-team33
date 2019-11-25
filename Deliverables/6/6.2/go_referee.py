@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
+from board import empty_board
 from copy import deepcopy
 from stone import StoneEnum
 from constants import PASS
@@ -16,8 +17,8 @@ class GoReferee:
     score_ref = ScoreReferee()
 
     ## Constructors
-    def __init__(self, history, players):
-        self.history = history
+    def __init__(self, players):
+        self.history = [empty_board()]
         self.players = players
         self.invalid_mover = None
 
@@ -31,9 +32,7 @@ class GoReferee:
             except CloseConnectionException:
                 self.invalid_mover = turn
                 break
-            if not move:
-                return []
-            elif move == PASS:
+            if move == PASS:
                 pass_count += 1
             elif isinstance(move, Point):
                 pass_count = 0
@@ -46,7 +45,8 @@ class GoReferee:
                 break
             self.play_move(move, turn)
             turn = self.next_turn(turn)
-        return (sorted(self.determine_winner()))
+        self.try_end_game()
+        return sorted(self.determine_winner()), self.invalid_mover
 
     def play_move(self, move, turn):
         new_board = deepcopy(self.history[0])
@@ -72,3 +72,10 @@ class GoReferee:
         
     def next_turn(self, turn):
         return (turn + 1) % 2
+    
+    def try_end_game(self):
+        for p in self.players:
+            try:
+                p.end_game()
+            except CloseConnectionException:
+                pass

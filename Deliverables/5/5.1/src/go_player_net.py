@@ -15,7 +15,7 @@ class GoPlayerNetwork(GoPlayer):
       self.name = None
       self.stone_type = None
    
-   def register(self, name="no name"):
+   def register(self):
       send_str = json.dumps([REGISTER])
       ret = self.send_and_receive(send_str)
       if ret != GO_CRAZY:
@@ -37,6 +37,15 @@ class GoPlayerNetwork(GoPlayer):
          return str_to_point(ret)
       except:
          return ret
+
+   def end_game(self):
+      send_str = json.dumps([END_GAME])
+      try:
+         ret = self.send_and_receive(send_str)
+         return ret
+      except ConnectionAbortedError:
+         pass
+
 
    def send_and_receive(self, send_str):
       self.conn.send(send_str.encode('utf-8'))

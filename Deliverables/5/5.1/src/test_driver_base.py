@@ -4,7 +4,7 @@ sys.path.append('../../4/4.1/src/')
 from exceptions import GoCrazyException
 from json_parser import json_parse_stdin
 from point import get_raw
-from constants import GO_CRAZY
+from constants import *
 from referee_formatter import format_pretty_json
 from obj_parser import parse_boards, parse_stone
 from constants import REGISTER, RECEIVE, MOVE
@@ -25,6 +25,11 @@ def execute_input(player, arr):
          if isinstance(output, str):
             return output
          return get_raw(output)
+      elif arr[0] == END_GAME:
+         output = player.end_game()
+         if output != "OK":
+            raise GoCrazyException("player did not return OK")
+         return output
       else:
          raise GoCrazyException("bad procedure name")
    except GoCrazyException:

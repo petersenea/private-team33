@@ -18,7 +18,12 @@ class GoPlayerRandom(GoPlayer):
         super().__init__()
         self.move_ref = MoveReferee()
 
+    def register(self):
+        return "random-player-{}".format(random.randint(0, 100000))
+
     def choose_move(self, boards):
+        if random.random() < 0.3:
+            return PASS
         empty_spaces = list(boards[0].get_points(None))
         random.shuffle(empty_spaces)
         for x, y in empty_spaces:
@@ -33,9 +38,9 @@ class GoPlayerCrazy(GoPlayerRandom):
         self.move_ref = MoveReferee()
         self.randomness = 0.5
     
-    def register(self, name = "no name"):
-        self._throw_exception()
-        return super().register(name)
+    def register(self):
+        # self._throw_exception()
+        return super().register()
 
     def receive_stone(self, stone_type):
         self._throw_exception()
@@ -59,7 +64,7 @@ class GoPlayerCrazy(GoPlayerRandom):
         return Point(-1, -1)
 
     def _throw_exception(self):
-        if random.random() < self.randomness/10:
+        if random.random() < self.randomness/2:
             raise CloseConnectionException("Randomly close the connection!")
 
     def _return_invalid(self):

@@ -41,7 +41,7 @@ class MoveReferee:
 
    ## Private Methods
    def _check_valid_point(self, board, point):
-      return not board.occupied(point)
+      return board.point_valid(point) and not board.occupied(point)
 
    def _check_ko(self, boards, stone_type, point=None):
       boards_lst = copy(boards)

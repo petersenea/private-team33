@@ -1,6 +1,7 @@
-import sys
+import sys, random
 sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
+from constants import *
 from stone import StoneEnum
 from move_referee import MoveReferee
 from exceptions import GoCrazyException
@@ -14,44 +15,43 @@ class GoPlayer:
       self.move_referee = MoveReferee()
    
    ## Public Methods
-   def register(self, name="no name"):
-      self.name = name
-      return name
+   def register(self):
+      return "no name"
 
    def receive_stone(self, stone_type):
       self.stone_type = stone_type
 
+   def end_game(self):
+      return "OK"
+
    def choose_move(self, boards):
       pass
 
-class GoPlayerContract(GoPlayer):
+class GoPlayerContract():
 
    def __init__(self, player):
+      self.action = REGISTER
       self.player = player   
-
-   @property
-   def stone_type(self):
-      return self.player.stone_type
-
-   @property
-   def name(self):
-      return self.player.name
    
-   def register(self, name="no name"):
-      if self.player.name != None:
-         raise GoCrazyException("register called multiple times")
-      return self.player.register(name)
+   def register(self):
+      if self.action != REGISTER:
+         raise GoCrazyException("Expected action was {}".format(self.action))
+      self.action = RECEIVE
+      self.name = self.player.register()
+      return self.name
    
    def receive_stone(self, stone_type):
-      if not self.player.name:
-         raise GoCrazyException("receive called before register")
-      elif self.player.stone_type:
-         raise GoCrazyException("receive called twice")
+      if self.action != RECEIVE:
+         raise GoCrazyException("Expected action was {}".format(self.action))
+      self.action = MOVE
       self.player.receive_stone(stone_type)
-   
+      self.stone_type = stone_type
+
    def choose_move(self, boards):
-      if not self.player.stone_type:
-         raise GoCrazyException("choose move called before receive")
-      if len(boards) > 3:
-         raise GoCrazyException("bad boards passed in")
+      if self.action != MOVE:
+         raise GoCrazyException("Expected action was {}".format(self.action))
       return self.player.choose_move(boards)
+   
+   def end_game(self):
+      self.action = RECEIVE
+      return self.player.end_game()

@@ -20,7 +20,7 @@ class GoAdmin:
         if not self.network_player:
             return ['player1']
         board = empty_board()
-        referee = GoReferee([board], [self.default_player, self.network_player])
+        referee = GoReferee([self.default_player, self.network_player])
         out = referee.play_game()
         self.close_server()
         return out
@@ -52,14 +52,14 @@ class GoAdmin:
         foo = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(foo)
         player = foo.GoPlayerBasic()
-        player.register("player1")
+        player.register()
         player.receive_stone(StoneEnum.BLACK)
         return player
 
     def load_network_player(self):
         network_player = GoPlayerNetwork(self.conn)
         try:
-            network_player.register("player2")  
+            network_player.register()  
             network_player.receive_stone(StoneEnum.WHITE)
         except CloseConnectionException:
             return None

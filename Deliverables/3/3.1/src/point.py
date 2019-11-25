@@ -23,11 +23,6 @@ def str_to_tupl(s):
    return ((pt.x, pt.y))
 
 def get_raw(tupl):
-   # if isinstance(tupl, Point):
-   #    tupl = (tupl.x, tupl.y)
-   # x, y = tupl
-   # return "{}-{}".format(x + 1, y + 1)
-
    if isinstance(tupl, Point):
       tupl = (tupl.x, tupl.y)
       x, y = tupl

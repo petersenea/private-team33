@@ -1,4 +1,4 @@
-import sys
+import sys, random
 sys.path.append('../../3/3.1/src/')
 sys.path.append('../../4/4.1/src/')
 from stone import StoneEnum
@@ -7,6 +7,9 @@ from point import Point
 from go_player import GoPlayer
 
 class GoPlayerBasic(GoPlayer):
+
+   def register(self):
+      return "basic-player-{}".format(random.randint(0, 100000))
 
    def choose_move(self, boards):
       if not self.move_referee.valid_history(self.stone_type, boards):
