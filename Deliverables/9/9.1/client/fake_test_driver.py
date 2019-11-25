@@ -49,7 +49,7 @@ for i in range(30):
         continue
 
 ## instantiate remote player
-player = GoPlayerRandom()
+player = GoPlayerCrazy()
 player_contract = GoPlayerContract(player)
 receive_and_send(s, player_contract)
 try_shutdown(s, socket.SHUT_RDWR)

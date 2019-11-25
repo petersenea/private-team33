@@ -18,7 +18,7 @@ class RoundRobinTournament:
         self.s = create_server(n)
         connections = [self.s.accept()[0] for i in range(n)]
         self.players = [load_network_player(c) for c in connections]
-        self.names = [p.register() for p in self.players]
+        self.names = [self.try_register(i) for i in range(self.n)]
         self.cheaters = []
 
     def host_tournament(self):
@@ -57,7 +57,6 @@ class RoundRobinTournament:
             self._update_score_cheater(a)
             self.cheaters.append(self.names[a])
             self._replace_cheater(a)
-            self.players[b].end_game()
             return
         
         player2 = self.players[b]
@@ -112,3 +111,10 @@ class RoundRobinTournament:
         for i in range(len(self.points_arr)):
             if self.points_arr[i][cheater_index] == 0:
                 self.points_arr[i][cheater_index] = 1
+
+    def try_register(self, ind):
+        try:
+            return self.players[ind].register()
+        except CloseConnectionException:
+            self.players[ind] = load_default_player()
+            return self.players[ind].register()

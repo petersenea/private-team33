@@ -39,7 +39,9 @@ class GoPlayerCrazy(GoPlayerRandom):
         self.randomness = 0.5
     
     def register(self):
-        # self._throw_exception()
+        self._throw_exception()
+        self._throw_exception()
+        self._throw_exception()
         return super().register()
 
     def receive_stone(self, stone_type):
@@ -64,7 +66,7 @@ class GoPlayerCrazy(GoPlayerRandom):
         return Point(-1, -1)
 
     def _throw_exception(self):
-        if random.random() < self.randomness/2:
+        if random.random() < self.randomness/10:
             raise CloseConnectionException("Randomly close the connection!")
 
     def _return_invalid(self):

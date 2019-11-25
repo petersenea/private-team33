@@ -14,9 +14,6 @@ from go_admin import read_config, write_config, new_port, try_shutdown
 ## Shared Functions
 def create_server(n):
     config = read_config('go.config')
-    config["port"] = new_port(config["port"])
-    write_config(config, 'go.config')
-
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((config["IP"], config["port"]))
     s.settimeout(60)
@@ -24,6 +21,9 @@ def create_server(n):
     return s
 
 def close_server(s):
+    config = read_config('go.config')
+    config["port"] = new_port(config["port"])
+    write_config(config, 'go.config')
     try_shutdown(s, socket.SHUT_RDWR)
     s.close()
 
@@ -40,7 +40,7 @@ def load_network_player(conn):
     inner = GoPlayerNetwork(conn)
     player = GoPlayerContract(inner)
     return player
-    
+
 def indices(lst, elem):
     return [i for i, x in enumerate(lst) if x == elem]
 
@@ -71,7 +71,7 @@ class SingleElimTournament:
         network_players = [load_network_player(c) for c in connections]
         default_players = [load_default_player() for i in range(self.total_n - n)]
         self.players = network_players + default_players
-        self.names = [p.register() for p in self.players]
+        self.names = [self.try_register(i) for i in range(self.total_n)]
 
     def host_tournament(self):
         rounds = int(math.log(self.total_n, 2))
@@ -125,3 +125,10 @@ class SingleElimTournament:
     def update_score(self, winner, loser):
         self.ranks[winner] += 1
         self.ranks[loser] -= 1
+    
+    def try_register(self, ind):
+        try:
+            return self.players[ind].register()
+        except CloseConnectionException:
+            self.players[ind] = load_default_player()
+            return self.players[ind].register()
